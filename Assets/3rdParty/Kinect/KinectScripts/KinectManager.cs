@@ -1318,8 +1318,11 @@ public class KinectManager : MonoBehaviour
 			instance = null;
 		}
 	}
-	
-	// Draw the Histogram Map on the GUI.
+
+    public RenderTexture rt;
+   
+
+    // Draw the Histogram Map on the GUI.
     void OnGUI()
     {
 		if(KinectInitialized)
@@ -1328,11 +1331,11 @@ public class KinectManager : MonoBehaviour
 	        {
 				if(usersMapRect.width == 0 || usersMapRect.height == 0)
 				{
-					// get the main camera rectangle
-					Rect cameraRect = Camera.main.pixelRect;
-					
-					// calculate map width and height in percent, if needed
-					if(DisplayMapsWidthPercent == 0f)
+                    // get the main camera rectangle
+                    Rect cameraRect = Camera.main.pixelRect;
+                    
+                    // calculate map width and height in percent, if needed
+                    if (DisplayMapsWidthPercent == 0f)
 					{
 						DisplayMapsWidthPercent = (KinectWrapper.GetDepthWidth() / 2) * 100 / cameraRect.width;
 					}
@@ -1346,8 +1349,12 @@ public class KinectManager : MonoBehaviour
 					usersMapRect = new Rect(cameraRect.width - displayWidth, cameraRect.height, displayWidth, -displayHeight);
 				}
 
-	            GUI.DrawTexture(usersMapRect, usersLblTex);
-	        }
+	            //GUI.DrawTexture(usersMapRect, usersLblTex);
+
+                RenderTexture.active = rt;
+                Graphics.Blit(usersLblTex, rt);
+
+            }
 
 			else if(ComputeColorMap && (/**(allUsers.Count == 0) ||*/ DisplayColorMap))
 			{
@@ -1355,9 +1362,9 @@ public class KinectManager : MonoBehaviour
 				{
 					// get the main camera rectangle
 					Rect cameraRect = Camera.main.pixelRect;
-					
-					// calculate map width and height in percent, if needed
-					if(DisplayMapsWidthPercent == 0f)
+                    
+                    // calculate map width and height in percent, if needed
+                    if (DisplayMapsWidthPercent == 0f)
 					{
 						DisplayMapsWidthPercent = (KinectWrapper.GetDepthWidth() / 2) * 100 / cameraRect.width;
 					}
@@ -1376,8 +1383,10 @@ public class KinectManager : MonoBehaviour
 //					}
 				}
 
-				GUI.DrawTexture(usersClrRect, usersClrTex);
-			}
+				//GUI.DrawTexture(usersClrRect, usersClrTex);
+                RenderTexture.active = rt;
+                Graphics.Blit(usersLblTex, rt);
+            }
 		}
     }
 	

@@ -1125,19 +1125,23 @@ public class KinectGestures
 
                     case 0:  // gesture detection     
                         if (jointsTracked[rightHipIndex] && jointsTracked[rightKneeIndex] && jointsTracked[rightAnkleIndex] &&
-                           Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.1f && 
-                           Mathf.Abs(jointsPos[rightKneeIndex].y - jointsPos[leftKneeIndex].y) > 0.05f)
+                           //Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.07f && 
+                           Mathf.Abs(jointsPos[rightKneeIndex].y - jointsPos[leftKneeIndex].y) > 0.1f ||
+                           Mathf.Abs(jointsPos[rightAnkleIndex].y - jointsPos[leftAnkleIndex].y) > 0.1f)
                         {
                             Walk();
+                            gestureData.progress = 0.5f;
                             SetGestureJoint(ref gestureData, timestamp, rightKneeIndex, jointsPos[rightKneeIndex]);
                         }
 
                         else if (jointsTracked[leftHipIndex] && jointsTracked[leftKneeIndex] && jointsTracked[leftAnkleIndex] &&
-                           Mathf.Abs(jointsPos[leftHipIndex].x - jointsPos[leftKneeIndex].x) > 0.1f &&
-                           Mathf.Abs(jointsPos[leftHipIndex].y - jointsPos[rightHipIndex].y) > 0.05f)
+                          // Mathf.Abs(jointsPos[leftHipIndex].x - jointsPos[leftKneeIndex].x) > 0.07f &&
+                           Mathf.Abs(jointsPos[leftKneeIndex].y - jointsPos[rightKneeIndex].y) > 0.1f ||
+                           Mathf.Abs(jointsPos[leftAnkleIndex].y - jointsPos[rightAnkleIndex].y) > 0.1f)
                         {
                             Walk();
-                            SetGestureJoint(ref gestureData, timestamp, leftKneeIndex, jointsPos[rightKneeIndex]);
+                            gestureData.progress = 0.5f;
+                            SetGestureJoint(ref gestureData, timestamp, leftKneeIndex, jointsPos[leftKneeIndex]);
                         }
                         break;
 
@@ -1147,11 +1151,13 @@ public class KinectGestures
                         {
                             bool isInPose = gestureData.joint == rightKneeIndex ?
                                 jointsTracked[rightHipIndex] && jointsTracked[rightKneeIndex] && jointsTracked[rightAnkleIndex] &&
-                           Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.1f &&
-                           Mathf.Abs(jointsPos[rightKneeIndex].y - jointsPos[leftKneeIndex].y) > 0.05f :
+                          // Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.07f &&
+                           Mathf.Abs(jointsPos[rightKneeIndex].y - jointsPos[leftKneeIndex].y) > 0.1f ||
+                           Mathf.Abs(jointsPos[rightAnkleIndex].y - jointsPos[leftAnkleIndex].y) > 0.1f :
                                 jointsTracked[leftHipIndex] && jointsTracked[leftKneeIndex] && jointsTracked[leftAnkleIndex] &&
-                           Mathf.Abs(jointsPos[leftHipIndex].x - jointsPos[leftKneeIndex].x) > 0.1f &&
-                           Mathf.Abs(jointsPos[leftKneeIndex].y - jointsPos[rightKneeIndex].y) > 0.05f;
+                           //Mathf.Abs(jointsPos[leftHipIndex].x - jointsPos[leftKneeIndex].x) > 0.07f &&
+                           Mathf.Abs(jointsPos[leftKneeIndex].y - jointsPos[rightKneeIndex].y) > 0.1f ||
+                           Mathf.Abs(jointsPos[leftAnkleIndex].y - jointsPos[rightAnkleIndex].y) > 0.1f;
 
                             if (isInPose)
                             {
@@ -1172,15 +1178,19 @@ public class KinectGestures
         }
 
         //Debugging the joints position here
-
         TextMeshProUGUI debugText = GameObject.FindGameObjectWithTag("DebugText").GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI debugText2 = GameObject.FindGameObjectWithTag("DebugText2").GetComponent<TextMeshProUGUI>();
-        debugText.text = "RHip: " + Math.Round(jointsPos[rightHipIndex].x, 3) + " RKnee: " + Math.Round(jointsPos[rightKneeIndex].x, 3);
-        debugText2.text = "Difference: " + Mathf.Abs((float)(Math.Round(jointsPos[rightHipIndex].x, 3) - Math.Round(jointsPos[rightKneeIndex].x, 3)));
 
-        //Debug.Log("LHip: " + jointsPos[leftHipIndex] + " LKnee: " + jointsPos[leftKneeIndex] + " LAnkle: " + jointsPos[leftAnkleIndex]);
-        //Debug.Log("RHip: " + jointsPos[rightHipIndex] + " RKnee: " + jointsPos[rightKneeIndex] + " RAnkle: " + jointsPos[rightAnkleIndex]);
-        //Debug.Log("RHip: " + Math.Round(jointsPos[rightHipIndex].x, 3) + " RKnee: " + Math.Round(jointsPos[rightKneeIndex].x, 3));
+        debugText.text = "RHip: " + Math.Round(jointsPos[rightHipIndex].x, 3) + " RKnee: " + Math.Round(jointsPos[rightKneeIndex].x, 3) + " \n Difference: " + Mathf.Abs((float)(Math.Round(jointsPos[rightHipIndex].x, 3) - Math.Round(jointsPos[rightKneeIndex].x, 3)));
+
+        if(GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>().IsWalking == true){
+            debugText2.text = "WALKING";
+        }
+        else
+        {
+            debugText2.text = " ";
+        }
+
 
     }
 

@@ -10,6 +10,7 @@ public class VRMovement : MonoBehaviour
     private Vector3 lookDir;
     private bool m_isMoving;
     public float speedMultiplier;
+    public float waitPeriod;
 
     public bool IsWalking { get; set; }
 
@@ -17,6 +18,11 @@ public class VRMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if(waitPeriod == 0f)
+        {
+            waitPeriod = 1.2f;
+        }
+
         IsWalking = false;
     }
 
@@ -55,7 +61,7 @@ public class VRMovement : MonoBehaviour
     IEnumerator WaitForInput()
     {
         //Wait x seconds then disable movement when coroutine is not restarted by additional movement
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSeconds(waitPeriod);
         m_isMoving = false;
     }
 
