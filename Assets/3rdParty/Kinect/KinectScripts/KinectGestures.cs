@@ -1122,50 +1122,48 @@ public class KinectGestures
             case Gestures.Walk:
                 switch (gestureData.state)
                 {
-                    //case 0:  // gesture detection     
-                    //    if (jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] && jointsTracked[rightShoulderIndex] &&
-                    //       Mathf.Abs(jointsPos[rightElbowIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f &&  // 0.07f
-                    //       Mathf.Abs(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f &&  // 0.7f
-                    //       jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] && jointsTracked[leftShoulderIndex] &&
-                    //       Mathf.Abs(jointsPos[leftElbowIndex].y - jointsPos[leftShoulderIndex].y) < 0.1f &&
-                    //       Mathf.Abs(jointsPos[leftHandIndex].y - jointsPos[leftShoulderIndex].y) < 0.1f)
-                    //    {
-                    //        SetGestureJoint(ref gestureData, timestamp, rightHandIndex, jointsPos[rightHandIndex]);
-                    //    }
-                    //    break;
-
-                    //case 1:  // gesture complete
-                    //    bool isInPose = jointsTracked[rightHandIndex] && jointsTracked[rightElbowIndex] && jointsTracked[rightShoulderIndex] &&
-                    //        Mathf.Abs(jointsPos[rightElbowIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f &&  // 0.7f
-                    //            Mathf.Abs(jointsPos[rightHandIndex].y - jointsPos[rightShoulderIndex].y) < 0.1f &&  // 0.7f
-                    //            jointsTracked[leftHandIndex] && jointsTracked[leftElbowIndex] && jointsTracked[leftShoulderIndex] &&
-                    //            Mathf.Abs(jointsPos[leftElbowIndex].y - jointsPos[leftShoulderIndex].y) < 0.1f &&
-                    //            Mathf.Abs(jointsPos[leftHandIndex].y - jointsPos[leftShoulderIndex].y) < 0.1f;
-
-                    //    Vector3 jointPos = jointsPos[gestureData.joint];
-                    //    CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
-                    //    break;
 
                     case 0:  // gesture detection     
                         if (jointsTracked[rightHipIndex] && jointsTracked[rightKneeIndex] && jointsTracked[rightAnkleIndex] &&
-                           Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.1f )
+                           Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.1f && 
+                           Mathf.Abs(jointsPos[rightKneeIndex].y - jointsPos[leftKneeIndex].y) > 0.05f)
                         {
-                            Debug.Log("Walk");
-                            VRMovement mover = GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>();
-                            mover.IsWalking = true;
-
+                            Walk();
                             SetGestureJoint(ref gestureData, timestamp, rightKneeIndex, jointsPos[rightKneeIndex]);
+                        }
+
+                        else if (jointsTracked[leftHipIndex] && jointsTracked[leftKneeIndex] && jointsTracked[leftAnkleIndex] &&
+                           Mathf.Abs(jointsPos[leftHipIndex].x - jointsPos[leftKneeIndex].x) > 0.1f &&
+                           Mathf.Abs(jointsPos[leftHipIndex].y - jointsPos[rightHipIndex].y) > 0.05f)
+                        {
+                            Walk();
+                            SetGestureJoint(ref gestureData, timestamp, leftKneeIndex, jointsPos[rightKneeIndex]);
                         }
                         break;
 
-                    case 1:  // gesture complete
-                        bool isInPose = jointsTracked[rightHipIndex] && jointsTracked[rightKneeIndex] && jointsTracked[rightAnkleIndex] &&
-                           Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.1f;
+                    case 1:  // gesture complete              
+                        
+                        if ((timestamp - gestureData.timestamp) < 1.5f)
+                        {
+                            bool isInPose = gestureData.joint == rightKneeIndex ?
+                                jointsTracked[rightHipIndex] && jointsTracked[rightKneeIndex] && jointsTracked[rightAnkleIndex] &&
+                           Mathf.Abs(jointsPos[rightHipIndex].x - jointsPos[rightKneeIndex].x) > 0.1f &&
+                           Mathf.Abs(jointsPos[rightKneeIndex].y - jointsPos[leftKneeIndex].y) > 0.05f :
+                                jointsTracked[leftHipIndex] && jointsTracked[leftKneeIndex] && jointsTracked[leftAnkleIndex] &&
+                           Mathf.Abs(jointsPos[leftHipIndex].x - jointsPos[leftKneeIndex].x) > 0.1f &&
+                           Mathf.Abs(jointsPos[leftKneeIndex].y - jointsPos[rightKneeIndex].y) > 0.05f;
 
-                        Vector3 jointPos = jointsPos[gestureData.joint];
-                       
-
-                        CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, KinectWrapper.Constants.PoseCompleteDuration);
+                            if (isInPose)
+                            {
+                                Vector3 jointPos = jointsPos[gestureData.joint];
+                                CheckPoseComplete(ref gestureData, timestamp, jointPos, isInPose, 0f);
+                            }
+                        }
+                        else
+                        {
+                            // cancel the gesture
+                            SetGestureCancelled(ref gestureData);
+                        }
                         break;
                 }
                 break;
@@ -1184,5 +1182,12 @@ public class KinectGestures
         //Debug.Log("RHip: " + jointsPos[rightHipIndex] + " RKnee: " + jointsPos[rightKneeIndex] + " RAnkle: " + jointsPos[rightAnkleIndex]);
         //Debug.Log("RHip: " + Math.Round(jointsPos[rightHipIndex].x, 3) + " RKnee: " + Math.Round(jointsPos[rightKneeIndex].x, 3));
 
+    }
+
+    public static void Walk()
+    {
+        Debug.Log("Walk");
+        VRMovement mover = GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>();
+        mover.IsWalking = true;
     }
 }

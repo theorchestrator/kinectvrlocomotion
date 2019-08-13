@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/KinectTestWalk.unity
+    guid: 4025b0c55e0550a4d89c8c65ac049fa8
   m_configObjects: {}

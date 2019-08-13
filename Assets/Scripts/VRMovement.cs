@@ -5,62 +5,58 @@ using UnityEngine;
 public class VRMovement : MonoBehaviour
 {
 
-
     public GameObject Player;
+
     private Vector3 lookDir;
+    private bool m_isMoving;
+    public float speedMultiplier;
 
-    public bool m_isWalking;
-    public bool coroutineStarted;
-
-    public bool IsWalking
-    {
-        get { return m_isWalking; }
-        set { m_isWalking = value; }
-    }
+    public bool IsWalking { get; set; }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        m_isWalking = false;
-
+        IsWalking = false;
     }
-    
+
+
     // Update is called once per frame
     void Update()
     {
 
-        //Debug
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            m_isWalking = true;
-        }
-        
+        //Set lookDir to the current direction the player / camera is looking at
         lookDir = transform.InverseTransformDirection(Camera.main.transform.forward);
 
-        if (m_isWalking == true)
+        //Mimic the kinect bool input
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            IsWalking = true;
+        }
+
+        if (IsWalking == true)
+        {
+            //Waiting for more walk input from kinect 
+            StopAllCoroutines();
+            StartCoroutine("WaitForInput");
+            m_isMoving = true;
+            IsWalking = false;
+        }
+
+        if (m_isMoving == true)
         {
 
-            //Beweg dich nach Vorne du Dildo
-            Player.transform.Translate(new Vector3(lookDir.x, 0, lookDir.z) * Time.deltaTime);
+            //Walk in the X/Z direction of the current direction the player / camera is looking at
+            Player.transform.Translate(new Vector3(lookDir.x, 0, lookDir.z) * Time.deltaTime * speedMultiplier);
 
-            //Auf weiteren Input warten danach Bewegen wieder stoppen
-            if(coroutineStarted == false)
-            {
-                coroutineStarted = true;
-                StartCoroutine(WaitForInput());
-            }
-           
         }
-  
     }
 
     IEnumerator WaitForInput()
     {
-        yield return new WaitForSeconds(2);
-        m_isWalking = false;
-        coroutineStarted = false;
+        //Wait x seconds then disable movement when coroutine is not restarted by additional movement
+        yield return new WaitForSeconds(1.2f);
+        m_isMoving = false;
     }
-
 
 }
