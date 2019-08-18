@@ -1181,7 +1181,8 @@ public class KinectGestures
         TextMeshProUGUI debugText = GameObject.FindGameObjectWithTag("DebugText").GetComponent<TextMeshProUGUI>();
         TextMeshProUGUI debugText2 = GameObject.FindGameObjectWithTag("DebugText2").GetComponent<TextMeshProUGUI>();
 
-        debugText.text = "RHip: " + Math.Round(jointsPos[rightHipIndex].x, 3) + " RKnee: " + Math.Round(jointsPos[rightKneeIndex].x, 3) + " \n Difference: " + Mathf.Abs((float)(Math.Round(jointsPos[rightHipIndex].x, 3) - Math.Round(jointsPos[rightKneeIndex].x, 3)));
+        debugText.text = "RHip: " + Math.Round(jointsPos[rightHipIndex].x, 3) + " RKnee: " + Math.Round(jointsPos[rightKneeIndex].x, 3) + 
+                         " \n Difference: " + Mathf.Abs((float)(Math.Round(jointsPos[rightHipIndex].x, 3) - Math.Round(jointsPos[rightKneeIndex].x, 3)));
 
         if(GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>().IsWalking == true){
             debugText2.text = "WALKING";
