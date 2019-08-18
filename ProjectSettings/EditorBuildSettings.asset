@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/KinectTestWalk.unity
     guid: 4025b0c55e0550a4d89c8c65ac049fa8
+  - enabled: 1
+    path: Assets/TEST.unity
+    guid: dfe0074c8e240a0468281b37abea5d41
   m_configObjects: {}
