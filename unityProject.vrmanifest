@@ -1,0 +1,16 @@
+{
+  "source": "Unity",
+  "applications": [
+    {
+      "app_key": "application.generated.unity.kinectvrprototype.exe",
+      "launch_type": "url",
+      "url": "steam://launch/",
+      "action_manifest_path": "D:\\Users\\Flo\\Dokumente\\SRH\\24. Bachelor Thesis\\Projekt\\KinectVRLocomotion\\actions.json",
+      "strings": {
+        "en_us": {
+          "name": "KinectVRPrototype [Testing]"
+        }
+      }
+    }
+  ]
+}

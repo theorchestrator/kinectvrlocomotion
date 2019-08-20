@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// This script is used to interpret the gesture recognition into VR-Movement taking into account the speed of the gesture recognition
+/// </summary>
 public class VRMovement : MonoBehaviour
 {
 
     public GameObject Player;
 
     private Vector3 lookDir;
+    private Vector3 walkDir;
+
     private bool m_isMoving;
     private bool timerEnabled = false;
 
@@ -44,6 +50,9 @@ public class VRMovement : MonoBehaviour
         //Set lookDir to the current direction the player / camera is looking at
         lookDir = transform.InverseTransformDirection(Camera.main.transform.forward);
 
+        //Add the strafe angle to the current look/walk direction
+        walkDir = Quaternion.Euler(0, this.gameObject.GetComponent<GetRotation>().StrafeAngle, 0) * new Vector3(lookDir.x, 0, lookDir.z);
+
         //The actual movement speed is a combined value of a base speed and a multiplier
         //The multiplier is the calculated duration between two recognised gestures
         speed = baseSpeed * speedMultiplier;
@@ -76,7 +85,7 @@ public class VRMovement : MonoBehaviour
             //Map the speed variables to the player velocity range
             if (timeSinceLastRecognition != 0)
             {
-
+                #region Old Speed Code
                 //if (timeSinceLastRecognition > 0.7f)
                 //{
                 //    speedMultiplier = 0.5f;
@@ -91,6 +100,7 @@ public class VRMovement : MonoBehaviour
                 //{
                 //    speedMultiplier = 2f;
                 //}
+                #endregion
 
                 Mathf.Clamp(speedMultiplier = MapValue(timeSinceLastRecognition, waitPeriod, 0.5f, 0.7f, 1.8f), 0.7f, 2f);
             }
@@ -103,30 +113,31 @@ public class VRMovement : MonoBehaviour
             
         }
 
-        if (m_isMoving == true)
+        //Walk in the X/Z direction of the current direction the player / camera is looking at
+        if (m_isMoving == true && this.GetComponent<GetRotation>().Backwards == false)
         {
-
-            //Walk in the X/Z direction of the current direction the player / camera is looking at
-            Player.transform.Translate(new Vector3(lookDir.x, 0, lookDir.z) * (Time.deltaTime * speed));
-
+            Player.transform.Translate(walkDir * (Time.deltaTime * speed));
         }
+
+        if (m_isMoving == true && this.GetComponent<GetRotation>().Backwards == true)
+        {
+            Player.transform.Translate(walkDir * (Time.deltaTime * -speed));
+        }
+
 
     }
 
     //Wait x amount of seconds then disable movement when coroutine is not restarted by additional movement
     IEnumerator WaitForInput()
     {
-        
         yield return new WaitForSeconds(waitPeriod);
         m_isMoving = false;
         timerEnabled = false;
         timeSinceLastRecognition = 0;
-
     }
 
-
     //This is the mapping function to map a value from one range to another
-    public static float MapValue(float value, float from1, float to1, float from2, float to2)
+    public float MapValue(float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }

@@ -1198,7 +1198,6 @@ public class KinectGestures
 
     }
 
-
     public static void Walk()
     {
         Debug.Log("Walk");
