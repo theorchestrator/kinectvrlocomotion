@@ -39,10 +39,6 @@ public class GetRotation : MonoBehaviour
     void Update()
     {
 
-        //Debug.Log("Left Controller: " +( leftController.transform.localRotation) + " Right Controller: " + rightController.transform.rotation);
-        //Debug.Log(strafeAngle + "" + Backwards);
-
-
         //Walk Backwards
         if (leftController.transform.localRotation.z > backwardsValue)
         {
@@ -68,6 +64,10 @@ public class GetRotation : MonoBehaviour
         {
             Backwards = false;
         }
+
+
+        //Debug.Log("Left Controller: " +( leftController.transform.localRotation) + " Right Controller: " + rightController.transform.rotation);
+        //Debug.Log(strafeAngle + "" + Backwards);
 
     }
 }

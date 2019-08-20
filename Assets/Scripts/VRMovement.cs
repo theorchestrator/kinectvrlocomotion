@@ -53,9 +53,18 @@ public class VRMovement : MonoBehaviour
         //Add the strafe angle to the current look/walk direction
         walkDir = Quaternion.Euler(0, this.gameObject.GetComponent<GetRotation>().StrafeAngle, 0) * new Vector3(lookDir.x, 0, lookDir.z);
 
+
         //The actual movement speed is a combined value of a base speed and a multiplier
         //The multiplier is the calculated duration between two recognised gestures
-        speed = baseSpeed * speedMultiplier;
+        //If the controller backwards motion is detected, the speed will be negated for "negative" acceleration
+        if (this.GetComponent<GetRotation>().Backwards == true)
+        {
+            speed = (baseSpeed * speedMultiplier) * -1;
+        }
+        else
+        {
+            speed = baseSpeed * speedMultiplier;
+        }
 
 
         //Debug the Microsoft Kinect bool input
@@ -114,14 +123,9 @@ public class VRMovement : MonoBehaviour
         }
 
         //Walk in the X/Z direction of the current direction the player / camera is looking at
-        if (m_isMoving == true && this.GetComponent<GetRotation>().Backwards == false)
+        if (m_isMoving == true)
         {
             Player.transform.Translate(walkDir * (Time.deltaTime * speed));
-        }
-
-        if (m_isMoving == true && this.GetComponent<GetRotation>().Backwards == true)
-        {
-            Player.transform.Translate(walkDir * (Time.deltaTime * -speed));
         }
 
 
