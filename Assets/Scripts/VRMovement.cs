@@ -34,7 +34,7 @@ public class VRMovement : MonoBehaviour
 
         speedMultiplier = 1.0f;
 
-        if(waitPeriod == 0f)
+        if (waitPeriod == 0f)
         {
             waitPeriod = 1f;
         }
@@ -50,20 +50,20 @@ public class VRMovement : MonoBehaviour
         //Set lookDir to the current direction the player / camera is looking at
         lookDir = transform.InverseTransformDirection(Camera.main.transform.forward);
 
-        //Add the strafe angle to the current look/walk direction
-        walkDir = Quaternion.Euler(0, this.gameObject.GetComponent<GetRotation>().StrafeAngle, 0) * new Vector3(lookDir.x, 0, lookDir.z);
-
-
         //The actual movement speed is a combined value of a base speed and a multiplier
         //The multiplier is the calculated duration between two recognised gestures
-        //If the controller backwards motion is detected, the speed will be negated for "negative" acceleration
+        speed = baseSpeed * speedMultiplier;
+
+
+        //Add the strafe angle to the current look/walk direction
+        //If the controller backwards motion is detected, the direction will be inverted for "negative" acceleration
         if (this.GetComponent<GetRotation>().Backwards == true)
         {
-            speed = (baseSpeed * speedMultiplier) * -1;
+            walkDir = Quaternion.Euler(0, this.gameObject.GetComponent<GetRotation>().StrafeAngle, 0) * Quaternion.Euler(0, 180, 0) * new Vector3(lookDir.x, 0, lookDir.z);
         }
         else
         {
-            speed = baseSpeed * speedMultiplier;
+            walkDir = Quaternion.Euler(0, this.gameObject.GetComponent<GetRotation>().StrafeAngle, 0) * new Vector3(lookDir.x, 0, lookDir.z);
         }
 
 
@@ -74,7 +74,7 @@ public class VRMovement : MonoBehaviour
         }
 
 
-        if(timerEnabled == true)
+        if (timerEnabled == true)
         {
             timeSinceLastRecognition += Time.deltaTime;
         }
@@ -119,7 +119,7 @@ public class VRMovement : MonoBehaviour
 
             m_isMoving = true;
             IsWalking = false;
-            
+
         }
 
         //Walk in the X/Z direction of the current direction the player / camera is looking at
