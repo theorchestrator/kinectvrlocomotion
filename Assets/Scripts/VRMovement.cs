@@ -8,7 +8,6 @@ using UnityEngine;
 /// </summary>
 public class VRMovement : MonoBehaviour
 {
-
     public GameObject Player;
 
     private Vector3 lookDir;
@@ -24,9 +23,7 @@ public class VRMovement : MonoBehaviour
     public float baseSpeed;
     public float waitPeriod;
 
-
     public bool IsWalking { get; set; }
-
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +39,6 @@ public class VRMovement : MonoBehaviour
         IsWalking = false;
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -53,7 +49,6 @@ public class VRMovement : MonoBehaviour
         //The actual movement speed is a combined value of a base speed and a multiplier
         //The multiplier is the calculated duration between two recognised gestures
         speed = baseSpeed * speedMultiplier;
-
 
         //Add the strafe angle to the current look/walk direction
         //If the controller backwards motion is detected, the direction will be inverted for "negative" acceleration
@@ -73,12 +68,10 @@ public class VRMovement : MonoBehaviour
             IsWalking = true;
         }
 
-
         if (timerEnabled == true)
         {
             timeSinceLastRecognition += Time.deltaTime;
         }
-
 
         if (IsWalking == true)
         {
@@ -110,13 +103,10 @@ public class VRMovement : MonoBehaviour
                 //    speedMultiplier = 2f;
                 //}
                 #endregion
-
                 Mathf.Clamp(speedMultiplier = MapValue(timeSinceLastRecognition, waitPeriod, 0.5f, 0.7f, 1.8f), 0.7f, 2f);
             }
 
-
             timeSinceLastRecognition = 0;
-
             m_isMoving = true;
             IsWalking = false;
 
@@ -127,8 +117,6 @@ public class VRMovement : MonoBehaviour
         {
             Player.transform.Translate(walkDir * (Time.deltaTime * speed));
         }
-
-
     }
 
     //Wait x amount of seconds then disable movement when coroutine is not restarted by additional movement
@@ -145,5 +133,4 @@ public class VRMovement : MonoBehaviour
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
-
 }
