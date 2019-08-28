@@ -1200,8 +1200,14 @@ public class KinectGestures
 
     public static void Walk()
     {
+
         Debug.Log("Walk");
         VRMovement mover = GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>();
         mover.IsWalking = true;
+
+
+        //Test kinect delay
+        GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().TimerEnabled = true;
+        GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().ButtonTimer = 0f;
     }
 }

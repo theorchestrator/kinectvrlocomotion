@@ -82,7 +82,7 @@ public class VRMovement : MonoBehaviour
             StartCoroutine("WaitForInput");
 
             //Debug the speed variables
-            Debug.Log("Rectime: " + timeSinceLastRecognition + "Multiplier: " + speedMultiplier + "Walk Speed: " + speed);
+            //Debug.Log("Rectime: " + timeSinceLastRecognition + "Multiplier: " + speedMultiplier + "Walk Speed: " + speed);
 
             //Map the speed variables to the player velocity range
             if (timeSinceLastRecognition != 0)
@@ -115,6 +115,7 @@ public class VRMovement : MonoBehaviour
         //Walk in the X/Z direction of the current direction the player / camera is looking at
         if (m_isMoving == true)
         {
+            this.gameObject.GetComponent<Tests>().TimerEnabled = false;
             Player.transform.Translate(walkDir * (Time.deltaTime * speed));
         }
     }
