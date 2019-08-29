@@ -19,6 +19,10 @@ public class JoystickMovement : MonoBehaviour
 
     private float direction;
 
+    private bool TimerArmed = false;
+    private float StopTimer;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -50,8 +54,20 @@ public class JoystickMovement : MonoBehaviour
         //Move in the actual walk direction with a certain speed
         if (m_MoveValue.axis.y > 0.01 || m_MoveValue.axis.y < -0.01)
         {
+            TimerArmed = true;
+
             //Debug.Log(walkDir);
             Player.transform.Translate(walkDir * (Time.deltaTime * m_Speed));
+        }
+
+
+        //Condition to test the input latency of the controller
+        if((TimerArmed == true && m_MoveValue.axis.y > -0.01f && m_MoveValue.axis.y < 0.01f))
+        {
+            StopTimer += Time.deltaTime;
+            TimerArmed = false;
+            Debug.Log("Stopping latency: " + StopTimer * 1000f);
+            StopTimer = 0f;
         }
     }
 }

@@ -1205,9 +1205,14 @@ public class KinectGestures
         VRMovement mover = GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>();
         mover.IsWalking = true;
 
-
         //Test kinect delay
-        GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().TimerEnabled = true;
+        GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().StartTimerEnabled = true;
         GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().ButtonTimer = 0f;
+
+
+        GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().StopTimerEnabled = true;
+        GameObject.FindGameObjectWithTag("Manager").GetComponent<Tests>().StopTimer = 0f;
+
+
     }
 }

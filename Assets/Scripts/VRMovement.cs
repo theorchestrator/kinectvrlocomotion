@@ -115,7 +115,7 @@ public class VRMovement : MonoBehaviour
         //Walk in the X/Z direction of the current direction the player / camera is looking at
         if (m_isMoving == true)
         {
-            this.gameObject.GetComponent<Tests>().TimerEnabled = false;
+            this.gameObject.GetComponent<Tests>().StartTimerEnabled = false;
             Player.transform.Translate(walkDir * (Time.deltaTime * speed));
         }
     }
@@ -127,6 +127,7 @@ public class VRMovement : MonoBehaviour
         m_isMoving = false;
         timerEnabled = false;
         timeSinceLastRecognition = 0;
+        this.gameObject.GetComponent<Tests>().StopTimerEnabled = false;
     }
 
     //This is the mapping function to map a value from one range to another

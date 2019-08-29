@@ -10,10 +10,15 @@ public class Tests : MonoBehaviour
     public SteamVR_Action_Boolean m_BooleanAction;
     public SteamVR_Action_Vector2 m_TouchPosition;
 
-    public bool TimerEnabled { get; set; }
+    public bool StartTimerEnabled { get; set; }
+
+    bool startTimerWasEnabled;
+    bool stopTimerWasEnabled;
+    public bool StopTimerEnabled { get; set; }
 
     public float ButtonTimer { get; set; }
-    
+
+    public float StopTimer { get; set; }
 
     void Awake()
     {
@@ -23,7 +28,7 @@ public class Tests : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TimerEnabled = false;
+        StartTimerEnabled = false;
         m_ActionSet.Activate(SteamVR_Input_Sources.Any, 0, true);
     }
 
@@ -31,23 +36,38 @@ public class Tests : MonoBehaviour
     void Update()
     {
        
-
         //For VR-Controller Input
         if (m_BooleanAction[SteamVR_Input_Sources.LeftHand].stateDown)
         {
             this.gameObject.GetComponent<VRMovement>().IsWalking = true;
-            TimerEnabled = true;
+            StartTimerEnabled = true;
             ButtonTimer = 0f;
-
         }
 
-
-        if (TimerEnabled == true)
+        if (StartTimerEnabled == true)
         {
+            startTimerWasEnabled = true;
             ButtonTimer += Time.deltaTime;
-            Debug.Log(ButtonTimer * 1000); //Returns the delay between input and walking (output) in Milliseconds (usually between 13-16.2ms)
         }
 
-     
+        if (StopTimerEnabled == true)
+        {
+            stopTimerWasEnabled = true;
+            StopTimer += Time.deltaTime;   
+        }
+
+        if(stopTimerWasEnabled && StopTimerEnabled == false)
+        {
+            Debug.Log("Stopping latency: " + StopTimer * 1000); //Returns the delay between stopping and end of walking in Milliseconds (usually between xx-xx ms)
+            stopTimerWasEnabled = false;
+        }
+
+        if (startTimerWasEnabled && StartTimerEnabled == false)
+        {
+            Debug.Log("Input latency: " + ButtonTimer * 1000); //Returns the delay between input and walking (output) in Milliseconds (usually between 13-17.2ms)
+            startTimerWasEnabled = false;
+        }
+
+
     }
 }
