@@ -116,7 +116,8 @@ public class VRMovement : MonoBehaviour
         if (m_isMoving == true)
         {
             this.gameObject.GetComponent<Tests>().StartTimerEnabled = false;
-            Player.transform.Translate(walkDir * (Time.deltaTime * speed));
+            //Player.transform.Translate(walkDir * (Time.deltaTime * speed));
+            Player.GetComponent<CharacterController>().Move(walkDir * (Time.deltaTime * speed));
         }
     }
 

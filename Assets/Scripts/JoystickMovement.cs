@@ -57,7 +57,8 @@ public class JoystickMovement : MonoBehaviour
             TimerArmed = true;
 
             //Debug.Log(walkDir);
-            Player.transform.Translate(walkDir * (Time.deltaTime * m_Speed));
+            //Player.transform.Translate(walkDir * (Time.deltaTime * m_Speed));
+            Player.GetComponent<CharacterController>().Move(walkDir * (Time.deltaTime * m_Speed));
         }
 
 
