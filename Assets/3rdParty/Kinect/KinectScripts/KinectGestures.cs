@@ -1201,7 +1201,7 @@ public class KinectGestures
     public static void Walk()
     {
 
-        Debug.Log("Walk");
+        //Debug.Log("Walk");
         VRMovement mover = GameObject.FindGameObjectWithTag("Manager").GetComponent<VRMovement>();
         mover.IsWalking = true;
 

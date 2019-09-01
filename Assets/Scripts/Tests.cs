@@ -58,13 +58,13 @@ public class Tests : MonoBehaviour
 
         if(stopTimerWasEnabled && StopTimerEnabled == false)
         {
-            Debug.Log("Stopping latency: " + StopTimer * 1000); //Returns the delay between stopping and end of walking in Milliseconds (usually between xx-xx ms)
+            //Debug.Log("Stopping latency: " + StopTimer * 1000); //Returns the delay between stopping and end of walking in Milliseconds (usually between xx-xx ms)
             stopTimerWasEnabled = false;
         }
 
         if (startTimerWasEnabled && StartTimerEnabled == false)
         {
-            Debug.Log("Input latency: " + ButtonTimer * 1000); //Returns the delay between input and walking (output) in Milliseconds (usually between 13-17.2ms)
+            //Debug.Log("Input latency: " + ButtonTimer * 1000); //Returns the delay between input and walking (output) in Milliseconds (usually between 13-17.2ms)
             startTimerWasEnabled = false;
         }
 

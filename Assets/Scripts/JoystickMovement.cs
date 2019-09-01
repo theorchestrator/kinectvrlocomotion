@@ -67,7 +67,7 @@ public class JoystickMovement : MonoBehaviour
         {
             StopTimer += Time.deltaTime;
             TimerArmed = false;
-            Debug.Log("Stopping latency: " + StopTimer * 1000f);
+            //Debug.Log("Stopping latency: " + StopTimer * 1000f);
             StopTimer = 0f;
         }
     }
