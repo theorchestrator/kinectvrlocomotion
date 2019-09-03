@@ -11,9 +11,6 @@ public class CheckPointTrigger : MonoBehaviour
         if(other.tag == "Player")
         {
             triggered = true;
-            Debug.Log(" T R I G G E R E D ! ");
         }
-        
     }
-
 }
