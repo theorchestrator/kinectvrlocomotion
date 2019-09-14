@@ -21,10 +21,12 @@ public class GetSpeed : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //Output the speed to test if the variable speed requirement for the protype is met
         float movement = Vector3.Distance(PrevFramePos, CameraRig.transform.position);
         Speed = movement / Time.deltaTime;
         PrevFramePos = CameraRig.transform.position;
 
-        //Debug.Log(Speed);
+        Debug.Log(Speed);
     }
 }
